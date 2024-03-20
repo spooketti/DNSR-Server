@@ -1,4 +1,6 @@
+import base64
 import cv2
+import numpy as np
 from face import get_faces
 from init import MODEL_MEAN_VALUES, age_net, AGE_POINTS, frame_width, gender_net, GENDER_LIST, GENDER_DICT
 
@@ -26,12 +28,13 @@ def image_resize(image, width = None, height = None, inter = cv2.INTER_AREA):
     # resize the image
     return cv2.resize(image, dim, interpolation = inter)
 
-def predict_age_and_gender(input_path: str):
+def predict_age_and_gender(imageinput):
     """Predict the age of the faces showing in the image"""
     # Read Input Image
-    img = cv2.imread(input_path)
+    #img = cv2.imread_base64(input_path)
+    frame = cv2.imdecode(imageinput, cv2.IMREAD_COLOR)
     # Take a copy of the initial image and resize it
-    frame = img.copy()
+    #frame = img.copy()
     if frame.shape[1] > frame_width:
         frame = image_resize(frame, width=frame_width)
     faces = get_faces(frame)
@@ -75,12 +78,11 @@ def predict_age_and_gender(input_path: str):
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), thickness=2)
         # draw the rectangle around the face
         cv2.rectangle(frame, (start_x, start_y), (end_x, end_y), color=(255, 0, 0), thickness=2)
-    # Display processed image
-    # Display Image on screen
-        cv2.imshow("Temp", frame)
-    # Mantain output until user presses a key
-        cv2.waitKey(0)
-    # Destroy windows when user presses a key
-        cv2.destroyAllWindows()
-    # save the image if you want
-    # cv2.imwrite("predicted_age.jpg", frame)
+
+        retval, buffer = cv2.imencode('.jpg', frame)
+        jpg_as_text = base64.b64encode(buffer).decode() #decode converts it to string, dont ask me why
+        return f"data:image/jpeg;base64,{jpg_as_text}"
+        #cv2.imshow("Temp", frame)
+        #cv2.waitKey(0)
+        #cv2.destroyAllWindows()
+        # cv2.imwrite("predicted_age.jpg", frame)
