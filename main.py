@@ -1,19 +1,11 @@
 from flask import Flask, request, jsonify, make_response, Response
-from threading import Thread
 from init import app
-from flask_sqlalchemy import SQLAlchemy 
-from authToken import token_required
-import jwt
-from werkzeug.security import generate_password_hash, check_password_hash
-from init import db, cors
-import time
-import datetime
-import os
+from init import cors
 
 
 @app.route('/')
 def home():
-    return "Relay's Server"
+    return "Physiognomy's Server"
 
 @app.before_request
 def before_request():
