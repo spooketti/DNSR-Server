@@ -1,12 +1,9 @@
-from flask import Flask, request, jsonify, make_response, Response
+from flask import request, jsonify
 from init import app
 from init import cors
-import io
-from imageio import imread
 import base64
 from ageWithGender import predict_age_and_gender
 import numpy as np
-import cv2
 
 
 @app.route('/')
@@ -22,7 +19,7 @@ def getPrediction():
   #opencv_image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
   
   result = predict_age_and_gender(image_array)
-  return jsonify({'image': result})
+  return jsonify(result)
 
 @app.before_request
 def before_request():
@@ -33,5 +30,4 @@ def before_request():
 
 def run():
   app.run(host='0.0.0.0',port=6221)
-#predict_age_and_gender("brick.jpg")
 run()

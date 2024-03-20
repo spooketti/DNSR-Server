@@ -1,6 +1,5 @@
 import base64
 import cv2
-import numpy as np
 from face import get_faces
 from init import MODEL_MEAN_VALUES, age_net, AGE_POINTS, frame_width, gender_net, GENDER_LIST, GENDER_DICT
 
@@ -58,17 +57,20 @@ def predict_age_and_gender(imageinput):
         #age
         age_net.setInput(blob)
         age_preds = age_net.forward()
-        print("="*30, f"Face {i+1} Prediction Probabilities", "="*30)
+        
+        payload = {}
+        
         for i in range(age_preds[0].shape[0]):
-            print(f"{AGE_POINTS[i]}: {age_preds[0, i]*100:.2f}%")
+            #print(f"{AGE_POINTS[i]}: {age_preds[0, i]*100:.2f}%")
+            payload[str(i)] = f"{age_preds[0, i]*100:.2f}%"
         i = age_preds[0].argmax()
         age = AGE_POINTS[i]
         age_confidence_score = age_preds[0][i]
         # Draw the box
         if(gender_confidence_score > .5):
-            cv2.putText(frame,f"{gender} - {age_confidence_score * 100:.2f}%",(start_x,end_y),cv2.FONT_HERSHEY_SIMPLEX, 1, GENDER_DICT[gender], 2)
+            cv2.putText(frame,f"{gender} - {gender_confidence_score * 100:.2f}%",(start_x,end_y),cv2.FONT_HERSHEY_SIMPLEX, 1, GENDER_DICT[gender], 2)
         label = f"Age:{age} - {age_confidence_score*100:.2f}%"
-        print(label)
+        payload["gconf"] = f"{gender_confidence_score *100:.2f}%"
         # get the position where to put the text
         yPos = start_y - 15
         while yPos < 15:
@@ -81,8 +83,5 @@ def predict_age_and_gender(imageinput):
 
         retval, buffer = cv2.imencode('.jpg', frame)
         jpg_as_text = base64.b64encode(buffer).decode() #decode converts it to string, dont ask me why
-        return f"data:image/jpeg;base64,{jpg_as_text}"
-        #cv2.imshow("Temp", frame)
-        #cv2.waitKey(0)
-        #cv2.destroyAllWindows()
-        # cv2.imwrite("predicted_age.jpg", frame)
+        payload["image"] = f"data:image/jpeg;base64,{jpg_as_text}"
+        return payload
