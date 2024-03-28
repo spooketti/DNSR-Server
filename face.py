@@ -2,6 +2,7 @@ from init import face_net
 import cv2
 import numpy as np
 
+# get faces function
 def get_faces(frame, confidence_threshold=0.5):
     blob = cv2.dnn.blobFromImage(frame, 1.0, (300, 300), (104, 177.0, 123.0))
     face_net.setInput(blob)

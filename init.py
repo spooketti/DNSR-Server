@@ -28,3 +28,4 @@ gender_net = cv2.dnn.readNetFromCaffe(GENDER_PROTO,GENDER_CAFFE)
 frame_width = 1280
 frame_height = 720
 
+#advik was here dont tell anyone hahdhwoahdoahwd
