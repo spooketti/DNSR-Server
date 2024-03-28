@@ -37,4 +37,3 @@ frame_height = 720
 # Output: Returns a list of tuples containing coordinates of bounding boxes for each detected face within the input frame. 
 # Each tuple represents the (start_x, start_y, end_x, end_y) coordinates of the bounding box surrounding a detected face.
 
-
