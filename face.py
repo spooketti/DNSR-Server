@@ -21,3 +21,12 @@ def get_faces(frame, confidence_threshold=0.5):
             end_y = max(end_y, 0)
             faces.append((start_x, start_y, end_x, end_y))
     return faces
+
+# Face Detection Function: Defines a function get_faces() which takes a frame (image) as input and detects faces within it. 
+# It utilizes the pre-trained face detection model (face_net) to detect faces with a confidence threshold of 0.5.
+
+# Processing Detected Faces: Extracts the bounding box coordinates for each detected face and adjusts them slightly for better visualization.
+# These coordinates represent the region of interest (ROI) where faces are detected within the frame.
+
+# Output: Returns a list of tuples containing coordinates of bounding boxes for each detected face within the input frame. 
+# Each tuple represents the (start_x, start_y, end_x, end_y) coordinates of the bounding box surrounding a detected face.
